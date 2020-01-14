@@ -1,0 +1,208 @@
+{
+	"settings": {
+		"number_of_shards": 11,
+		"number_of_replicas": 3,
+		"analysis": {
+			"analyzer": {
+				"my_custom_analyzer": {
+					"type": "custom",
+					"tokenizer": "keyword",
+					"filter": [
+						"lowercase",
+						"whitespace_normalization",
+						"trim"
+					]
+				}
+			},
+			"filter": {
+				"whitespace_normalization": {
+					"type": "pattern_replace",
+					"pattern": "\\s+",
+					"replacement": " "
+				}
+			}
+		}
+	},
+	"mappings": {
+		"doc": {
+			"properties": {
+				"id": {
+					"type": "long"
+				},
+				"custId": {
+					"type": "long"
+				},
+				"custAccNo": {
+					"type": "text"
+				},
+				"nomineeShare": {
+					"type": "text"
+				},
+				"amtShareFixed": {
+					"type": "text"
+				},
+				"relation": {
+					"type": "text"
+				},
+				"name": {
+					"type": "text",
+					"analyzer": "my_custom_analyzer"
+				},
+				"dob": {
+					"type": "date",
+					"format": "yyyy-MM-dd"
+				},
+				"addressLine1": {
+					"type": "text"
+				},
+				"addressLine2": {
+					"type": "text"
+				},
+				"addressLine3": {
+					"type": "text"
+				},
+				"addressLine4": {
+					"type": "text"
+				},
+				"addressSplit": {
+					"type": "text"
+				},
+				"district": {
+					"type": "text"
+				},
+				"city": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"state": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"country": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"pincode": {
+					"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+				},
+				"emailId": {
+					"type": "text"
+				},
+				"phoneArea": {
+					"type": "text"
+				},
+				"phoneExt": {
+					"type": "text"
+				},
+				"mobileNo": {
+					"type": "text"
+				},
+				"age": {
+					"type": "text"
+				},
+				"guardianInfo": {
+					"properties": {
+						"name": {
+							"type": "text",
+							"analyzer": "my_custom_analyzer"
+						},
+						"relation": {
+							"type": "text"
+						},
+						"addressLine1": {
+							"type": "text"
+						},
+						"addressLine2": {
+							"type": "text"
+						},
+						"addressLine3": {
+							"type": "text"
+						},
+						"addressLine4": {
+							"type": "text"
+						},
+						"addressSplit": {
+							"type": "text"
+						},
+						"district": {
+							"type": "text"
+						},
+						"city": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"state": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"country": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"pincode": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"emailId": {
+							"type": "text"
+						},
+						"phoneArea": {
+							"type": "text"
+						},
+						"phoneExt": {
+							"type": "text"
+						},
+						"mobileNo": {
+							"type": "text"
+						},
+						"dob": {
+							"type": "date",
+							"format": "yyyy-MM-dd"
+						}
+					}
+				}
+			}
+		}
+	}
+}

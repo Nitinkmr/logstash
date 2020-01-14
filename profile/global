@@ -1,0 +1,234 @@
+package com.airtelbank.customer.exception;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import com.airtelbank.customer.constant.Constants;
+import com.airtelbank.customer.dao.repository.ErrorMessageRepository;
+import com.airtelbank.customer.model.CustomError;
+import com.airtelbank.customer.model.ErrorMessage;
+import com.airtelbank.customer.model.LoggerModel;
+import com.airtelbank.customer.model.Meta;
+import com.airtelbank.customer.model.envelop.ResponseDTO;
+import com.airtelbank.customer.util.CustomerUtil;
+import com.airtelbank.customer.util.MessageProvider;
+
+
+@ControllerAdvice
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+	
+	private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+	@Autowired
+	Environment environment;
+	
+	@Autowired
+	private MessageSource messageSource;
+	
+	@Autowired
+    LoggerModel loggerModel;
+	
+	@Autowired
+	private ErrorMessageRepository errorMessageRepository;
+
+	@ExceptionHandler(CustomerNotFoundException.class)
+	protected ResponseEntity<Object> handleEntityNotFound(
+			CustomerNotFoundException ex) {
+		log.error("CustomerNotFound error  response");
+		ResponseDTO<?> responseDTO = new ResponseDTO<>();
+		responseDTO.setMeta(ex.getMeta());
+		log.error("Exception Response DTO :" + responseDTO);
+        loggerModel.getErrors().add(CustomerUtil.setLoggerError(ex.getMeta()));
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDTO);
+	}
+	
+	@ExceptionHandler(value = { ThirdPartyApiException.class})
+    protected ResponseEntity<Object> handleTimeouts(RuntimeException ex, WebRequest request) {
+		ResponseDTO<?> responseDTO = new ResponseDTO<>();
+		Meta meta = new Meta();
+		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+		Throwable throwable = ex.getCause();
+		
+		meta.setCode(messageSource.getMessage("config.timeout.errorCode",null,null));
+		meta.setDescription(messageSource.getMessage("config.timeout.errorMessage",null,null));
+		meta.setStatus(Constants.STATUS_FAILURE);
+	
+		responseDTO.setMeta(meta);
+		log.error("Exception Response DTO :" + responseDTO);
+        loggerModel.getErrors().add(CustomerUtil.setLoggerError(meta));
+		return ResponseEntity.status(status).body(responseDTO);
+		
+    }
+
+	@ExceptionHandler(value = {CBSException.class,JsonCustomParsingException.class})
+	protected ResponseEntity<Object> handleCBSError(CBSException ex) {
+		Meta meta = new Meta();
+		if (ex.getMeta() != null) {
+			meta = ex.getMeta();
+		} else {
+			if (ex.getId() != null) {
+				meta.setDescription(ex.getId());
+			} else {
+				meta.setDescription(messageSource.getMessage("config.generic.errorMessage", null, null));
+			}
+			meta.setCode(messageSource.getMessage("config.generic.errorCode", null, null));
+			meta.setStatus(Constants.STATUS_FAILURE);
+		}
+
+		ResponseDTO error = new ResponseDTO();
+		error.setMeta(meta);
+		log.error("Exception Response DTO :" + error);
+        loggerModel.getErrors().add(CustomerUtil.setLoggerError(meta));
+		return ResponseEntity.status(HttpStatus.OK).body(error);
+	}
+	
+	@ExceptionHandler(value = { GenericException.class})
+    protected ResponseEntity<Object> handleGenericException(GenericException ex) {
+		ResponseDTO<?> responseDTO = new ResponseDTO<>();
+		Meta meta = new Meta();
+		meta.setCode(messageSource.getMessage("config.generic.errorCode",null,null));
+		meta.setDescription(messageSource.getMessage("config.generic.errorMessage",null,null));
+		meta.setStatus(Constants.STATUS_FAILURE);
+		responseDTO.setMeta(meta);
+		log.error("Exception Response DTO :{} ",responseDTO);
+		log.error("Exception: :{} ",ExceptionUtils.getStackTrace(ex));
+        loggerModel.getErrors().add(CustomerUtil.setLoggerError(meta));
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseDTO);
+		
+	}
+	
+	@ExceptionHandler(value = {CustomerUpgradeValidationException.class})
+	protected ResponseEntity<Object> handleCustomerUpgradeValidationException(CustomerUpgradeValidationException ex) {
+		logger.info("upgrade validation exception" , ex);
+		Meta meta = new Meta();
+		if (ex.getCode() != null) {
+			meta.setCode(ex.getCode());
+			ErrorMessage errorMessage = errorMessageRepository.findByErrorCode(ex.getCode());
+			if( errorMessage == null) {
+				meta.setDescription(messageSource.getMessage(ex.getCode(), ex.getParams(),null));
+			}else {
+				meta.setDescription(MessageProvider.getFormatedMessage(errorMessage.getErrorMessage(), ex.getParams()));
+			}
+			
+		} else {
+			meta.setCode(messageSource.getMessage("customer.upgrade.validation.failure.generic.code", null, null));
+			meta.setDescription(messageSource.getMessage("customer.upgrade.validation.failure.generic.msg", null, null));
+		}
+		meta.setStatus(Constants.STATUS_FAILURE);
+		ResponseDTO error = new ResponseDTO();
+		error.setMeta(meta);
+		log.error("Exception Response DTO : {}" , error);
+        loggerModel.getErrors().add(CustomerUtil.setLoggerError(meta));
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+	}
+	
+	
+	@Override
+	protected ResponseEntity<Object> handleExceptionInternal(Exception exception, Object body, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
+		// TODO Auto-generated method stub
+		log.info("In handleExceptionInternal");
+		ResponseDTO<?> responseDTO = new ResponseDTO<>();
+		Meta meta = new Meta();
+		if( exception instanceof MethodArgumentTypeMismatchException) {
+			MethodArgumentTypeMismatchException matme = (MethodArgumentTypeMismatchException)exception;
+			meta.setCode(messageSource.getMessage("config.validation.errorCode",null,null));
+			meta.setDescription(messageSource.getMessage("config.validation.errorMessage",null,null));
+			meta.setStatus(Constants.STATUS_FAILURE);
+			List<CustomError> errors = new ArrayList<>();
+			
+			errors.add(new CustomError(matme.getName(), matme.getErrorCode(), null));
+			
+			
+			responseDTO.setErrors(errors);
+			responseDTO.setMeta(meta);
+			log.error("Exception Response DTO :" + responseDTO);
+
+	        loggerModel.getErrors().add(CustomerUtil.setLoggerError(meta));
+
+			return ResponseEntity.badRequest().body(responseDTO);
+		}if(exception instanceof MethodArgumentNotValidException){
+			log.info("validation error");
+			
+			List<CustomError> errors = new ArrayList<>();
+
+			for (FieldError error : ((MethodArgumentNotValidException) exception).getBindingResult().getFieldErrors()) {
+				errors.add(new CustomError(error.getField(), error.getDefaultMessage(), null));
+			}
+			
+			meta.setCode(messageSource.getMessage("config.validation.errorCode",null,null));
+			meta.setDescription(messageSource.getMessage("config.validation.errorMessage",null,null));
+			meta.setStatus(Constants.STATUS_FAILURE);
+			responseDTO.setErrors(errors);
+			responseDTO.setMeta(meta);
+			log.error("Exception Response DTO :" + responseDTO);
+
+	        loggerModel.getErrors().add(CustomerUtil.setLoggerError(meta));
+
+			return ResponseEntity.badRequest().body(responseDTO);
+		}else if(exception instanceof ServletRequestBindingException){
+			log.info("headers missing");
+			
+			meta.setCode(messageSource.getMessage("config.headersMissing.errorCode",null,null));
+			meta.setDescription(messageSource.getMessage("config.headersMissing.errorMessage",null,null));
+			meta.setStatus(Constants.STATUS_FAILURE);
+			responseDTO.setMeta(meta);
+			log.error("Exception Response DTO :" + responseDTO);
+
+	        loggerModel.getErrors().add(CustomerUtil.setLoggerError(meta));
+
+			return ResponseEntity.badRequest().body(responseDTO);
+		}
+		else {
+			log.error("Exception Root Cause :" + ExceptionUtils.getStackTrace(exception));
+			meta.setCode(messageSource.getMessage("config.generic.errorCode",null,null));
+			meta.setDescription(messageSource.getMessage("config.generic.errorMessage",null,null));
+			meta.setStatus(Constants.STATUS_FAILURE);
+			responseDTO.setMeta(meta);
+			log.error("Exception Response DTO :" + responseDTO);
+
+	        loggerModel.getErrors().add(CustomerUtil.setLoggerError(meta));
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseDTO);
+		}
+		
+	}
+	//Common exceptions
+	@ExceptionHandler(value = {AeroSpikeException.class})
+	protected ResponseEntity<Object> aeroSpikeExcetion(AeroSpikeException ex) {
+		Meta meta = new Meta();
+		if (ex.getId() != null) {
+			meta.setDescription(ex.getId());
+		} else {
+			meta.setDescription(messageSource.getMessage("account.aerospike.error.msg", null, null));
+		}
+		meta.setCode(messageSource.getMessage("account.aerospike.error.code", null, null));
+		meta.setStatus(Constants.STATUS_FAILURE);
+		ResponseDTO error = new ResponseDTO();
+		error.setMeta(meta);
+		log.error("Exception Response DTO :" + error);
+        loggerModel.getErrors().add(CustomerUtil.setLoggerError(meta));
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+	}
+	
+	
+
+}

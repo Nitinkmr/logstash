@@ -1,0 +1,1158 @@
+{
+	"settings": {
+		"number_of_shards": 11,
+		"number_of_replicas": 3,
+		"analysis": {
+			"analyzer": {
+				"my_custom_analyzer": {
+					"type": "custom",
+					"tokenizer": "keyword",
+					"filter": [
+						"lowercase",
+						"whitespace_normalization",
+						"trim"
+					]
+				}
+			},
+			"filter": {
+				"whitespace_normalization": {
+					"type": "pattern_replace",
+					"pattern": "\\s+",
+					"replacement": " "
+				}
+			}
+		}
+	},
+	"mappings": {
+		"doc": {
+			"properties": {
+				"@timestamp": {
+					"type": "date"
+				},
+				"timestamp": {
+					"type": "date"
+				},
+				"@version": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"aadhaarNo": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"accounts": {
+					"properties": {
+						"fky": {
+							"properties": {
+								"branch": {
+									"type": "long"
+								},
+								"number": {
+									"type": "text"
+								},
+								"openDate": {
+									"type": "date",
+									"format": "yyyy-MM-dd"
+								},
+								"expDate": {
+									"type": "date",
+									"format": "yyyy-MM-dd"
+								},
+								"productCode": {
+									"type": "long"
+								},
+								"status": {
+									"type": "long"
+								},
+								"title": {
+									"type": "text",
+									"analyzer": "my_custom_analyzer"
+								},
+								"type": {
+									"type": "text"
+								}
+							}
+						},
+						"lky": {
+							"properties": {
+								"branch": {
+									"type": "long"
+								},
+								"number": {
+									"type": "text"
+								},
+								"openDate": {
+									"type": "date",
+									"format": "yyyy-MM-dd"
+								},
+								"expDate": {
+									"type": "date",
+									"format": "yyyy-MM-dd"
+								},
+								"productCode": {
+									"type": "long"
+								},
+								"status": {
+									"type": "long"
+								},
+								"title": {
+									"type": "text",
+									"analyzer": "my_custom_analyzer"
+								},
+								"type": {
+									"type": "text"
+								}
+							}
+						},
+						"sba": {
+							"properties": {
+								"branch": {
+									"type": "long"
+								},
+								"number": {
+									"type": "text"
+								},
+								"openDate": {
+									"type": "date",
+									"format": "yyyy-MM-dd"
+								},
+								"expDate": {
+									"type": "date",
+									"format": "yyyy-MM-dd"
+								},
+								"productCode": {
+									"type": "long"
+								},
+								"status": {
+									"type": "long"
+								},
+								"title": {
+									"type": "text",
+									"analyzer": "my_custom_analyzer"
+								},
+								"type": {
+									"type": "text"
+								}
+							}
+						},
+						"cur": {
+							"properties": {
+								"branch": {
+									"type": "long"
+								},
+								"number": {
+									"type": "text"
+								},
+								"openDate": {
+									"type": "date",
+									"format": "yyyy-MM-dd"
+								},
+								"expDate": {
+									"type": "date",
+									"format": "yyyy-MM-dd"
+								},
+								"productCode": {
+									"type": "long"
+								},
+								"status": {
+									"type": "long"
+								},
+								"title": {
+									"type": "text",
+									"analyzer": "my_custom_analyzer"
+								},
+								"type": {
+									"type": "text"
+								}
+							}
+						},
+						"ssfb": {
+							"properties": {
+								"branch": {
+									"type": "long"
+								},
+								"number": {
+									"type": "text"
+								},
+								"openDate": {
+									"type": "date",
+									"format": "yyyy-MM-dd"
+								},
+								"expDate": {
+									"type": "date",
+									"format": "yyyy-MM-dd"
+								},
+								"productCode": {
+									"type": "long"
+								},
+								"status": {
+									"type": "long"
+								},
+								"title": {
+									"type": "text",
+									"analyzer": "my_custom_analyzer"
+								},
+								"type": {
+									"type": "text"
+								}
+							}
+						}
+					}
+				},
+				"activationDate": {
+					"type": "date",
+					"format": "yyyy-MM-dd"
+				},
+				"addresses": {
+					"properties": {
+						"local": {
+							"properties": {
+								"city": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"country": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"district": {
+									"type": "text"
+								},
+								"line1": {
+									"type": "text"
+								},
+								"line2": {
+									"type": "text"
+								},
+								"line3": {
+									"type": "text"
+								},
+								"line4": {
+									"type": "text"
+								},
+								"pincode": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"state": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								}
+							}
+						},
+						"permanent": {
+							"properties": {
+								"city": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"country": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"district": {
+									"type": "text"
+								},
+								"line1": {
+									"type": "text"
+								},
+								"line2": {
+									"type": "text"
+								},
+								"line3": {
+									"type": "text"
+								},
+								"line4": {
+									"type": "text"
+								},
+								"pincode": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"state": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"vtc": {
+									"type": "text"
+								}
+							}
+						}
+					}
+				},
+				"benefits": {
+					"properties": {
+						"dbtOpted": {
+							"type": "text"
+						},
+						"dtrOpted": {
+							"type": "text"
+						},
+						"insuranceGiven": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"upiEnabled": {
+							"type": "text"
+						}
+					}
+				},
+				"branch": {
+					"type": "long"
+				},
+				"cardType": {
+					"type": "text"
+				},
+				"category": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"cifType": {
+					"type": "text"
+				},
+				"circle": {
+					"type": "text"
+				},
+				"cspMobile": {
+					"type": "text"
+				},
+				"cspNatl": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"cspSegment": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"creationDate": {
+					"type": "date",
+					"format": "yyyy-MM-dd"
+				},
+				"custType": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"corrAddressSameAsPermAddress": {
+					"type": "text"
+				},
+				"poaTypePhotoName": {
+					"type": "text"
+				},
+				"customFciAmount": {
+					"type": "text"
+				},
+				"cafForm60PdfPath": {
+					"type": "text"
+				},
+				"msme": {
+					"type": "text"
+				},
+				"sweepAccountFlag": {
+					"type": "text"
+				},
+				"cKyc": {
+					"type": "text"
+				},
+				"txnId": {
+					"type": "text"
+				},
+				"customFld9": {
+					"type": "text"
+				},
+				"dob": {
+					"type": "date",
+					"format": "yyyy-MM-dd"
+				},
+				"emailDetails": {
+					"properties": {
+						"primary": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"secondary": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						}
+					}
+				},
+				"eSign": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"fatherName": {
+					"type": "text",
+					"analyzer": "my_custom_analyzer"
+				},
+				"fciAmount": {
+					"type": "long"
+				},
+				"fkyAcctNo": {
+					"type": "text"
+				},
+				"flgBlocked": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"employment": {
+					"properties": {
+						"employeeId": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"staff": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"profession": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						}
+					}
+				},
+				"gender": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"icType": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"custId": {
+					"type": "long"
+				},
+				"identities": {
+					"properties": {
+						"aadhaar": {
+							"properties": {
+								"expiryDate": {
+									"type": "date"
+								},
+								"issueAuthority": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"issueDate": {
+									"type": "date",
+									"format": "yyyy-MM-dd"
+								},
+								"issuePlace": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"id": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"uid": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"type": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"isPoi": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"isPoa": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								}
+							}
+						},
+						"pan": {
+							"properties": {
+								"expiryDate": {
+									"type": "date"
+								},
+								"issueAuthority": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"issueDate": {
+									"type": "date",
+									"format": "yyyy-MM-dd"
+								},
+								"ackNumber": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"status": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"applicationDate": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"issuePlace": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"id": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"type": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"isPoi": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"isPoa": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								}
+							}
+						},
+						"drivingLicence": {
+							"properties": {
+								"expiryDate": {
+									"type": "date"
+								},
+								"issueAuthority": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"issueDate": {
+									"type": "date",
+									"format": "yyyy-MM-dd"
+								},
+								"issuePlace": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"id": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"type": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"isPoi": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"isPoa": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								}
+							}
+						},
+						"nrega": {
+							"properties": {
+								"expiryDate": {
+									"type": "date"
+								},
+								"issueAuthority": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"issueDate": {
+									"type": "date",
+									"format": "yyyy-MM-dd"
+								},
+								"issuePlace": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"id": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"type": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"isPoi": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"isPoa": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								}
+							}
+						},
+						"passport": {
+							"properties": {
+								"expiryDate": {
+									"type": "date"
+								},
+								"issueAuthority": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"issueDate": {
+									"type": "date",
+									"format": "yyyy-MM-dd"
+								},
+								"issuePlace": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"id": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"type": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"isPoi": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"isPoa": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								}
+							}
+						},
+						"voterCard": {
+							"properties": {
+								"expiryDate": {
+									"type": "date"
+								},
+								"issueAuthority": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"issueDate": {
+									"type": "date",
+									"format": "yyyy-MM-dd"
+								},
+								"issuePlace": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"id": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"type": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"isPoi": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								},
+								"isPoa": {
+									"type": "text",
+									"fields": {
+										"keyword": {
+											"type": "keyword",
+											"ignore_above": 256
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"incomeDetails": {
+					"properties": {
+						"agriculture": {
+							"type": "long"
+						},
+						"category": {
+							"type": "text"
+						},
+						"annualRange": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"nonAgriculture": {
+							"type": "long"
+						}
+					}
+				},
+				"kycStatus": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"kycFlag": {
+					"type": "text"
+				},
+				"lang": {
+					"type": "text"
+				},
+				"lkyAcctNo": {
+					"type": "text"
+				},
+				"maritalStatus": {
+					"type": "long"
+				},
+				"mobileNumberDetails": {
+					"properties": {
+						"primary": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"secondary": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						}
+					}
+				},
+				"mobileType": {
+					"type": "text"
+				},
+				"motherName": {
+					"type": "text",
+					"analyzer": "my_custom_analyzer"
+				},
+				"name": {
+					"properties": {
+						"first": {
+							"type": "text",
+							"analyzer": "my_custom_analyzer"
+						},
+						"full": {
+							"type": "text",
+							"analyzer": "my_custom_analyzer"
+						},
+						"last": {
+							"type": "text",
+							"analyzer": "my_custom_analyzer"
+						},
+						"mid": {
+							"type": "text",
+							"analyzer": "my_custom_analyzer"
+						},
+						"shortName": {
+							"type": "text",
+							"analyzer": "my_custom_analyzer"
+						},
+						"prefix": {
+							"type": "text",
+							"analyzer": "my_custom_analyzer"
+						}
+					}
+				},
+				"nationality": {
+					"type": "text"
+				},
+				"natlId": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"officerId": {
+					"type": "text"
+				},
+				"onboardChannel": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"panId": {
+					"type": "text"
+				},
+				"pep": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"poaNumber": {
+					"type": "text"
+				},
+				"poaType": {
+					"type": "text"
+				},
+				"poiNumber": {
+					"type": "text"
+				},
+				"poiType": {
+					"type": "text"
+				},
+				"regStatus": {
+					"type": "text"
+				},
+				"riskProfile": {
+					"properties": {
+						"profile": {
+							"type": "text",
+							"fields": {
+								"keyword": {
+									"type": "keyword",
+									"ignore_above": 256
+								}
+							}
+						},
+						"score": {
+							"type": "text"
+						}
+					}
+				},
+				"sbaAcctNo": {
+					"type": "text"
+				},
+				"status": {
+					"type": "text"
+				},
+				"upgradeChannel": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				}
+			}
+		}
+	}
+}
